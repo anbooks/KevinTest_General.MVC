@@ -2,11 +2,15 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using General.Core;
+using General.Entities;
+using General.Services.Category;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -33,6 +37,21 @@ namespace KevinTest_General.MVC
 
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+
+            services.AddDbContextPool<GeneralDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+
+            //#Kevin 添加权限过滤
+            services.AddAuthentication();
+
+            //
+            services.AddScoped<ICategoryService, CategoryService>();
+
+           // services.BuildServiceProvider().GetService<ICategoryService>();
+
+            //#Kevin 引入引擎机制
+            EnginContext.Initialize(new GeneralEngine(services.BuildServiceProvider()));
+            
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -52,6 +71,10 @@ namespace KevinTest_General.MVC
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseCookiePolicy();
+
+
+            //Kevin 添加权限过滤
+            app.UseAuthentication();
 
             app.UseMvc(routes =>
             {
