@@ -8,10 +8,14 @@ using KevinTest_General.MVC.Models;
 using General.Entities;
 using General.Services.Category;
 using General.Core;
+using General.Core.Data;
+using General.Entities.Category;
+using General.Framework.Controllers;
 
 namespace KevinTest_General.MVC.Controllers
 {
-    public class HomeController : Controller
+    public class HomeController : BaseController  //基础控制类，里面放公共变量啥的
+    //public class HomeController : Controller
     {
         //测试一下数据库连接
         //private GeneralDbContext _generalDbContext;
@@ -31,7 +35,29 @@ namespace KevinTest_General.MVC.Controllers
         //}
 
 
+        //private ICategoryService _categoryService;
+
+        //这个不知道从哪里开始？
+        //private IRepository<Category> _categoryRepository;
+        //private IRepository<SysUser> _sysUserRepository;
+        //private IRepository<SysUser> _userRepository;
+
+
+        //public HomeController(IRepository<Category> categoryRepository,IRepository<SysUser> sysUserRepository, IRepository<SysUser> userRepository)
+        //{
+        //    this._categoryRepository = categoryRepository;
+        //    this._sysUserRepository = sysUserRepository;
+        //    this._userRepository = userRepository;
+
+        //}
+
         private ICategoryService _categoryService;
+
+        public HomeController(ICategoryService categoryService)
+        {
+            this._categoryService = categoryService;
+        }
+
 
         public IActionResult Index()
         {
@@ -41,7 +67,13 @@ namespace KevinTest_General.MVC.Controllers
 
             //var list=  _categoryService.getAll();
 
-            _categoryService = EnginContext.Current.Resolve<ICategoryService>();
+            //_categoryService = EnginContext.Current.Resolve<ICategoryService>();
+            //var list = _categoryService.getAll();
+
+            //bool b = Object.ReferenceEquals(_categoryRepository.DbContext, _sysUserRepository.DbContext);  //the same
+            //bool s = Object.ReferenceEquals(_userRepository, _sysUserRepository);
+
+
             var list = _categoryService.getAll();
             return View();
         }

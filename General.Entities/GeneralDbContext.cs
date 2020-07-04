@@ -12,7 +12,7 @@ namespace General.Entities
 
         }
 
-        //public DbSet<Category.Category> Categories { get; set; }
-        public DbSet<Category> Categories { get; set; }
+        public DbSet<Category.Category> Categories { get; set; }
+       // public DbSet<Category> Categories { get; set; }
     }
 }

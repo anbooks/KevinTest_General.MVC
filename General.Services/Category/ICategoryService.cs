@@ -9,7 +9,12 @@ namespace General.Services.Category
     public  interface ICategoryService
     {
 
-        //List<Entities.Category.Category> getAll();
-        List<Entities.Category> getAll();
+        List<Entities.Category.Category> getAll();
+       // List<Entities.Category> getAll();
+    }
+
+    public interface IGeneralService
+    {
+
     }
 }
