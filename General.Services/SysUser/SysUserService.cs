@@ -1,4 +1,5 @@
 ﻿using General.Core.Data;
+using General.Core.Librs;
 using General.Entities;
 using System;
 using System.Collections.Generic;
@@ -34,11 +35,32 @@ namespace General.Services.SysUser
 
         //------------------------------------------------------
 
-        public (bool, string, string ,Entities.SysUser.SysUser) validateUser(string account, string password, string r)
+        public (bool Status, string Message, string Token, Entities.SysUser.SysUser User) validateUser(string account, string password, string r)
         {
             //return (false,"密码错误",null,null);
+            var user = getByAccount(account);
+            if (user == null)
+                return (false,"用户名或密码错误",null,null);
+
+            var md5Password = EncrytorHelper.GetMD5(user.Password + r);
+            if (password.Equals(md5Password, StringComparison.InvariantCultureIgnoreCase))
+            {
+
+            };
+
             return (true, "登录成功", "aaaa1111", new Entities.SysUser.SysUser() { Id=Guid.NewGuid().ToString(),Name="李四"});
         }
+
+        /// <summary>
+        /// 通过账号获取用户
+        /// </summary>
+        /// <param name="account"></param>
+        /// <returns></returns>
+        public Entities.SysUser.SysUser getByAccount(string account)
+        {
+            return _sysUserRepository.Table.FirstOrDefault(o => o.Account == account);
+        }
+
 
     }
 }

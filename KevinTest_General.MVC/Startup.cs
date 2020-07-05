@@ -64,12 +64,14 @@ namespace KevinTest_General.MVC
             //----------------------------------
 
             services.AddAuthentication(o=> {
-                o.DefaultAuthenticateScheme = "General";
-                o.DefaultChallengeScheme = "General";
-                o.DefaultSignInScheme = "General";
-                o.DefaultSignOutScheme = "General";    //都找这个名字的cookie值
+                //o.DefaultAuthenticateScheme = "General";
+                //o.DefaultChallengeScheme = "General";
+                //o.DefaultSignInScheme = "General";
+                //o.DefaultSignOutScheme = "General";    //都找这个名字的cookie值
+                o.DefaultAuthenticateScheme = CookieAdminAuthInfo.AuthenticationScheme;
+                o.DefaultChallengeScheme = CookieAdminAuthInfo.AuthenticationScheme;
 
-            }).AddCookie("General",o =>
+            }).AddCookie(CookieAdminAuthInfo.AuthenticationScheme,o =>
             {
                 // o.LoginPath = "/Admin/Login/Index";
                 o.LoginPath = "/admin/login";

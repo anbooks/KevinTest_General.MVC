@@ -35,7 +35,8 @@ namespace General.Framework.Security.Admin
             ClaimsPrincipal claimsPrincipal=new ClaimsPrincipal();
 
 
-            _httpContextAccessor.HttpContext.SignInAsync("General",claimsPrincipal);
+            //_httpContextAccessor.HttpContext.SignInAsync("General",claimsPrincipal);
+            _httpContextAccessor.HttpContext.SignInAsync(CookieAdminAuthInfo.AuthenticationScheme, claimsPrincipal);
         }
 
     }

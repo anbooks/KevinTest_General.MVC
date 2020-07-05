@@ -10,6 +10,10 @@ namespace General.Entities.SysUser
     {
         public string  Id { get; set; }
 
+        public string Account { get; set; }
+
         public string Name { get; set; }
+
+        public string Password { get; set; }
     }
 }
