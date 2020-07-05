@@ -11,13 +11,32 @@ namespace General.Framework.Controllers
         /// <summary>
         /// ajax请求的数据结果
         /// </summary>
+
+        //public AjaxResult AjaxData
+        //{
+        //    get
+        //    {
+        //        //return _ajaxResult;
+        //        return new AjaxResult();
+        //    }
+        //}
+        //-----------------------------------------------
+
+        private AjaxResult _ajaxResult;
+
+        public BaseController()
+        {
+            this._ajaxResult = new AjaxResult();
+        }
+        
         public AjaxResult AjaxData
         {
             get
             {
-                //return _ajaxResult;
-                return new AjaxResult();
+                return _ajaxResult;
             }
         }
+
+
     }
 }

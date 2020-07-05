@@ -54,12 +54,30 @@ namespace KevinTest_General.MVC
             services.AddDbContextPool<GeneralDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
 
+           //------------------------------- 成品项目中重新写
             //#Kevin 添加权限过滤
             //services.AddAuthentication();
-            services.AddAuthentication("General").AddCookie(o=>
+            //services.AddAuthentication("General").AddCookie(o=>
+            //{
+            //    o.LoginPath = "/Admin/Login/Index";
+            //});
+            //----------------------------------
+
+            services.AddAuthentication(o=> {
+                o.DefaultAuthenticateScheme = "General";
+                o.DefaultChallengeScheme = "General";
+                o.DefaultSignInScheme = "General";
+                o.DefaultSignOutScheme = "General";    //都找这个名字的cookie值
+
+            }).AddCookie("General",o =>
             {
-                o.LoginPath = "/Admin/Login/Index";
+                // o.LoginPath = "/Admin/Login/Index";
+                o.LoginPath = "/admin/login";
             });
+
+
+
+
 
             //单个的注入可以注释掉了
             //services.AddScoped<ICategoryService, CategoryService>();
@@ -89,14 +107,14 @@ namespace KevinTest_General.MVC
             services.AddScoped(typeof(IRepository<>), typeof(EfRepository<>) );
 
             services.AddScoped<IWorkContext, WorkContext>();
-            services.AddScoped<IAuthenticationService, AuthenticationService>();
+            services.AddScoped<IAdminAuthService, AdminAuthService>();
 
             //services.BuildServiceProvider().GetService<ICategoryService>();
 
             //#Kevin 引入引擎机制
             EnginContext.Initialize(new GeneralEngine(services.BuildServiceProvider()));
-            
 
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
