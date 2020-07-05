@@ -7,6 +7,9 @@ using General.Core.Data;
 using General.Core.Extensions;
 using General.Core.Librs;
 using General.Entities;
+using General.Framework;
+using General.Framework.Infrastructure;
+using General.Framework.Security.Admin;
 using General.Services.Category;
 using General.Services.Setting;
 using Microsoft.AspNetCore.Builder;
@@ -84,6 +87,9 @@ namespace KevinTest_General.MVC
 
             //泛型注入到Di里面
             services.AddScoped(typeof(IRepository<>), typeof(EfRepository<>) );
+
+            services.AddScoped<IWorkContext, WorkContext>();
+            services.AddScoped<IAuthenticationService, AuthenticationService>();
 
             //services.BuildServiceProvider().GetService<ICategoryService>();
 

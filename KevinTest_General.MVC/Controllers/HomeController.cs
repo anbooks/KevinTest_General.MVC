@@ -14,6 +14,7 @@ using General.Framework.Controllers;
 
 namespace KevinTest_General.MVC.Controllers
 {
+    //[Route("home")]
     public class HomeController : BaseController  //基础控制类，里面放公共变量啥的
     //public class HomeController : Controller
     {
@@ -59,6 +60,7 @@ namespace KevinTest_General.MVC.Controllers
         }
 
 
+        //[Route("")]
         public IActionResult Index()
         {
             //测试一下数据库连接
@@ -78,12 +80,14 @@ namespace KevinTest_General.MVC.Controllers
             return View();
         }
 
+        [Route("privacy")]
         public IActionResult Privacy()
         {
             return View();
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+        [Route("error")]
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
