@@ -1,4 +1,5 @@
 ﻿using General.Entities.SysUser;
+using General.Services.SysUser;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using System;
@@ -11,14 +12,23 @@ namespace General.Framework.Security.Admin
     public class AdminAuthService:IAdminAuthService
     {
         private IHttpContextAccessor _httpContextAccessor;
-        public AdminAuthService(IHttpContextAccessor httpContextAccessor)
+        private ISysUserService _sysUserService;
+        public AdminAuthService(IHttpContextAccessor httpContextAccessor, ISysUserService sysUserService)
         {
             this._httpContextAccessor = httpContextAccessor;
+            this._sysUserService = sysUserService;
 
         }
         public SysUser getCurrentUser()
         {
-            return new SysUser() { Id = Guid.NewGuid().ToString(), Name = "李四" };
+            //return new SysUser() { Id = Guid.NewGuid(), Name = "李四" };
+
+            var result = _httpContextAccessor.HttpContext.AuthenticateAsync(CookieAdminAuthInfo.AuthenticationScheme).Result;
+            if (result.Principal == null)
+                return null;
+            //var token = result.Principal.FindFirstValue(ClaimTypes.Sid); //临时改成这个样子的
+            var token = result.Principal.FindFirst(ClaimTypes.Sid).Value;
+            return _sysUserService.getLogged(token ?? "");
         }
 
         /// <summary>

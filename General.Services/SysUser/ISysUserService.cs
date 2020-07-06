@@ -23,6 +23,15 @@ namespace General.Services.SysUser
         /// <param name="account"></param>
         /// <returns></returns>
         Entities.SysUser.SysUser getByAccount(string account);
+
+
+        /// <summary>
+        /// 通过当前登录用户的token 获取用户信息，并缓存
+        /// </summary>
+        /// <param name="token"></param>
+        /// <returns></returns>
+        Entities.SysUser.SysUser getLogged(string token);
+
     }
 
     public interface IGeneralService

@@ -19,5 +19,11 @@ namespace General.Entities.SysUser
         [Required(ErrorMessage = "请输入密码")]
         public string Password { get; set; }
 
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public string R { get; set; }
+
     }
 }

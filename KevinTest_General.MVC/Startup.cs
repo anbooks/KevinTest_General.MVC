@@ -18,6 +18,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -111,6 +112,7 @@ namespace KevinTest_General.MVC
             services.AddScoped<IWorkContext, WorkContext>();
             services.AddScoped<IAdminAuthService, AdminAuthService>();
 
+            services.AddSingleton<IMemoryCache, MemoryCache>();
             //services.BuildServiceProvider().GetService<ICategoryService>();
 
             //#Kevin 引入引擎机制

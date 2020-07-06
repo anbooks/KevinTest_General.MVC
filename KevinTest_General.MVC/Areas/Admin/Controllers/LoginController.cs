@@ -62,6 +62,7 @@ namespace KevinTest_General.MVC.Areas.Admin.Controllers
                 return Json(AjaxData);
             }
 
+
             var result= _sysUserService.validateUser(model.Account, model.Password, "");
             AjaxData.Status = result.Item1;
             AjaxData.Message = result.Item2;
