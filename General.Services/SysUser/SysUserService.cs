@@ -1,7 +1,7 @@
-﻿using General.Core.Data;
+﻿using General.Core;
+using General.Core.Data;
 using General.Core.Librs;
 using General.Entities;
-using General.Entities.SysUserToken;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using System;
@@ -18,17 +18,17 @@ namespace General.Services.SysUser
         private IMemoryCache _memoryCache;  //缓存类
         private const string MODEL_KEY = "General.services.user_{0}";
 
-        private IRepository<Entities.SysUser.SysUser> _sysUserRepository;
+        private IRepository<Entities.SysUser> _sysUserRepository;
 
 
-        private IRepository<Entities.SysUserToken.SysUserToken> _sysUserTokenRepository;
+        private IRepository<Entities.SysUserToken> _sysUserTokenRepository;
         //public CategoryService(GeneralDbContext generalDbContext)
         //{
         //    this._generalDbContext = generalDbContext;
 
         //}
 
-        public SysUserService(IRepository<Entities.SysUser.SysUser> sysUserRepository, IRepository<Entities.SysUserToken.SysUserToken> sysUserTokenRepository,
+        public SysUserService(IRepository<Entities.SysUser> sysUserRepository, IRepository<Entities.SysUserToken> sysUserTokenRepository,
             IMemoryCache memoryCache)
         {
             this._sysUserRepository = sysUserRepository;
@@ -37,7 +37,7 @@ namespace General.Services.SysUser
         }
 
 
-        public List<Entities.SysUser.SysUser> getAll()
+        public List<Entities.SysUser> getAll()
         //public List<Entities.Category> getAll() //通过引擎的方式
         {
             //return _generalDbContext.Categories.ToList();
@@ -46,7 +46,7 @@ namespace General.Services.SysUser
 
         //------------------------------------------------------
 
-        public (bool Status, string Message, string Token, Entities.SysUser.SysUser User) validateUser(string account, string password, string r)
+        public (bool Status, string Message, string Token, Entities.SysUser User) validateUser(string account, string password, string r)
         {
             //return (false,"密码错误",null,null);
             var user = getByAccount(account);
@@ -84,7 +84,7 @@ namespace General.Services.SysUser
                 user.LastIpAddress = "";
 
                 //登录日志
-                user.SysUserLoginLogs.Add(new Entities.SysUserLoginLog.SysUserLoginLog()
+                user.SysUserLoginLogs.Add(new Entities.SysUserLoginLog()
                 {
                     Id = Guid.NewGuid(),
                     IpAddress = "",
@@ -108,7 +108,7 @@ namespace General.Services.SysUser
             else
             {
                 //登录日志
-                user.SysUserLoginLogs.Add(new Entities.SysUserLoginLog.SysUserLoginLog()
+                user.SysUserLoginLogs.Add(new Entities.SysUserLoginLog()
                 {
                     Id = Guid.NewGuid(),
                     IpAddress = "",
@@ -134,7 +134,7 @@ namespace General.Services.SysUser
         /// </summary>
         /// <param name="account"></param>
         /// <returns></returns>
-        public Entities.SysUser.SysUser getByAccount(string account)
+        public Entities.SysUser getByAccount(string account)
         {
             //return _sysUserRepository.Table.FirstOrDefault(o => o.Account == account);
             return _sysUserRepository.Table.FirstOrDefault(o => o.Account == account && !o.IsDeleted);
@@ -145,12 +145,12 @@ namespace General.Services.SysUser
         /// </summary>
         /// <param name="token"></param>
         /// <returns></returns>
-        public Entities.SysUser.SysUser getLogged(string token)
+        public Entities.SysUser getLogged(string token)
         {
-            Entities.SysUserToken.SysUserToken userToken = null;
-            Entities.SysUser.SysUser sysUser = null;
+            Entities.SysUserToken userToken = null;
+            Entities.SysUser sysUser = null;
 
-            _memoryCache.TryGetValue<Entities.SysUserToken.SysUserToken>(token, out userToken);
+            _memoryCache.TryGetValue<Entities.SysUserToken>(token, out userToken);
             if (userToken != null)
             {
                 _memoryCache.TryGetValue(String.Format(MODEL_KEY, userToken.SysUserId), out sysUser);
@@ -173,6 +173,132 @@ namespace General.Services.SysUser
                 }
             }
             return null;
+        }
+
+
+        /// <summary>
+        /// 搜索数据
+        /// </summary>
+        /// <param name="arg"></param>
+        /// <param name="page"></param>
+        /// <param name="size"></param>
+        /// <returns></returns>
+        public IPagedList<Entities.SysUser> searchUser(SysUserSearchArg arg, int page, int size)
+        {
+            var query = _sysUserRepository.Table.Where(o => !o.IsDeleted);
+            if (arg != null)
+            {
+                if (!String.IsNullOrEmpty(arg.q))
+                    query = query.Where(o => o.Account.Contains(arg.q) || o.MobilePhone.Contains(arg.q) || o.Email.Contains(arg.q) || o.Name.Contains(arg.q));
+                if (arg.enabled.HasValue)
+                    query = query.Where(o => o.Enabled == arg.enabled);
+                if (arg.unlock.HasValue)
+                    query = query.Where(o => o.LoginLock == arg.unlock);
+                if (arg.roleId.HasValue)
+                    query = query.Where(o => o.SysUserRoles.Any(r => r.RoleId == arg.roleId));
+            }
+            query = query.OrderBy(o => o.Account).ThenBy(o => o.Name).ThenByDescending(o => o.CreationTime);
+            return new PagedList<Entities.SysUser>(query, page, size);
+        }
+
+        /// <summary>
+        /// 获取用户详情
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public Entities.SysUser getById(Guid id)
+        {
+            return _sysUserRepository.getById(id);
+        }
+
+        /// <summary>
+        /// 新增，插入
+        /// </summary>
+        /// <param name="model"></param>
+        public void insertSysUser(Entities.SysUser model)
+        {
+            if (existAccount(model.Account))
+                return;
+            _sysUserRepository.insert(model);
+        }
+
+        /// <summary>
+        /// 更新修改
+        /// </summary>
+        /// <param name="model"></param>
+        void updateSysUser(Entities.SysUser model)
+        {
+            _sysUserRepository.DbContext.Entry(model).State = EntityState.Unchanged;
+            _sysUserRepository.DbContext.Entry(model).Property("Name").IsModified = true;
+            _sysUserRepository.DbContext.Entry(model).Property("Email").IsModified = true;
+            _sysUserRepository.DbContext.Entry(model).Property("MobilePhone").IsModified = true;
+            _sysUserRepository.DbContext.Entry(model).Property("Sex").IsModified = true;
+            _sysUserRepository.DbContext.SaveChanges();
+        }
+
+        /// <summary>
+        /// 重置密码。默认重置成账号一样
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="modifer"></param>
+        public void resetPassword(Guid id, Guid modifer)
+        {
+
+        }
+
+        /// <summary>
+        /// 验证账号是否已经存在
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="account"></param>
+        /// <returns></returns>
+        public bool existAccount(string account)
+        {
+            return _sysUserRepository.Table.Any(o => o.Account == account && !o.IsDeleted);
+        }
+
+        void ISysUserService.updateSysUser(Entities.SysUser model)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void enabled(Guid id, bool enabled, Guid modifer)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void loginLock(Guid id, bool ulock, Guid modifer)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void deleteUser(Guid id, Guid modifer)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void addAvatar(Guid id, byte[] avatar)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void changePassword(Guid id, string password)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void lastActivityTime(Guid id)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// 移除缓存用户
+        /// </summary>
+        /// <param name="userId"></param>
+        private void removeCacheUser(Guid userId)
+        {
+            _memoryCache.Remove(String.Format(MODEL_KEY, userId));
         }
 
 

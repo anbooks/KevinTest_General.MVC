@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace General.Entities.SysUserSearchArg
+namespace General.Entities
 {
     /// <summary>
     /// 查询参数

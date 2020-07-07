@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
-namespace General.Entities.SysUser
+namespace General.Entities
 {
     [Table("SysUser")]
     [Serializable]
@@ -12,9 +12,9 @@ namespace General.Entities.SysUser
     {
         public SysUser()
         {
-            SysUserTokens = new HashSet<Entities.SysUserToken.SysUserToken>();
-            SysUserLoginLogs = new HashSet<Entities.SysUserLoginLog.SysUserLoginLog>();
-            SysUserRoles = new HashSet<Entities.SysUserRole.SysUserRole>();
+            SysUserTokens = new HashSet<Entities.SysUserToken>();
+            SysUserLoginLogs = new HashSet<Entities.SysUserLoginLog>();
+            SysUserRoles = new HashSet<Entities.SysUserRole>();
         }
 
         public Guid Id { get; set; }
@@ -94,11 +94,11 @@ namespace General.Entities.SysUser
         /// <summary>
         /// 
         /// </summary>
-        public virtual ICollection<Entities.SysUserRole.SysUserRole> SysUserRoles { get; set; }
+        public virtual ICollection<Entities.SysUserRole> SysUserRoles { get; set; }
 
-        public virtual ICollection<Entities.SysUserToken.SysUserToken> SysUserTokens { get; set; }
+        public virtual ICollection<Entities.SysUserToken> SysUserTokens { get; set; }
 
-        public virtual ICollection<Entities.SysUserLoginLog.SysUserLoginLog> SysUserLoginLogs { get; set; }
+        public virtual ICollection<Entities.SysUserLoginLog> SysUserLoginLogs { get; set; }
     }
 
     //[Table("SysUser")]   //这个才是数据的表

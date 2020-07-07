@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
-namespace General.Entities.SysUserLoginLog
+namespace General.Entities
 {
     [Table("SysUserLoginLog")]
     public class SysUserLoginLog
@@ -22,7 +22,7 @@ namespace General.Entities.SysUserLoginLog
         public string Message { get; set; }
 
         [ForeignKey("UserId")]
-        public virtual Entities.SysUser.SysUser SysUser { get; set; }
+        public virtual Entities.SysUser SysUser { get; set; }
     }
 
 

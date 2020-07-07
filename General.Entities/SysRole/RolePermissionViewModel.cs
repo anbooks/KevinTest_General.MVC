@@ -2,28 +2,28 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace General.Entities.RolePermissionViewModel
+namespace General.Entities
 {
     public class RolePermissionViewModel
     {
         /// <summary>
         /// 
         /// </summary>
-        public Entities.SysRole.SysRole Role { get; set; }
+        public Entities.SysRole Role { get; set; }
 
         /// <summary>
         /// 角色select下拉菜单
         /// </summary>
-        public List<Entities.SysRole.SysRole> RoleList { get; set; }
+        public List<Entities.SysRole> RoleList { get; set; }
 
         /// <summary>
         /// 角色的权限数据
         /// </summary>
-        public List<Entities.SysPermission.SysPermission> Permissions { get; set; }
+        public List<Entities.SysPermission> Permissions { get; set; }
 
         /// <summary>
         /// 
         /// </summary>
-        public List<Entities.Category.Category> CategoryList { get; set; }
+        public List<Entities.Category> CategoryList { get; set; }
     }
 }

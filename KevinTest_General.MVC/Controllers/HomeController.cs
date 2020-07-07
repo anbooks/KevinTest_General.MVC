@@ -9,7 +9,7 @@ using General.Entities;
 using General.Services.Category;
 using General.Core;
 using General.Core.Data;
-using General.Entities.Category;
+using General.Entities;
 using General.Framework.Controllers;
 
 namespace KevinTest_General.MVC.Controllers

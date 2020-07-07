@@ -4,15 +4,15 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
-namespace General.Entities.SysRole
+namespace General.Entities
 {
     [Table("SysRole")]
     public partial class SysRole
     {
         public SysRole()
         {
-            SysPermission = new HashSet<Entities.SysPermission.SysPermission>();
-            SysUserRole = new HashSet<Entities.SysUserRole.SysUserRole>();
+            SysPermission = new HashSet<SysPermission>();
+            SysUserRole = new HashSet<SysUserRole>();
         }
 
         public Guid Id { get; set; }
@@ -30,15 +30,15 @@ namespace General.Entities.SysRole
         public DateTime? ModifiedTime { get; set; }
 
 
-        public virtual ICollection<Entities.SysPermission.SysPermission> SysPermission { get; set; }
+        public virtual ICollection<Entities.SysPermission> SysPermission { get; set; }
 
         [ForeignKey("Creator")]
-        public virtual Entities.SysUser.SysUser SysUser { get; set; }
+        public virtual Entities.SysUser SysUser { get; set; }
 
         [ForeignKey("Modifier")]
-        public virtual Entities.SysUser.SysUser SysUser1 { get; set; }
+        public virtual Entities.SysUser SysUser1 { get; set; }
 
-        public virtual ICollection<Entities.SysUserRole.SysUserRole> SysUserRole { get; set; }
+        public virtual ICollection<Entities.SysUserRole> SysUserRole { get; set; }
     }
 
 }

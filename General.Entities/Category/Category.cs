@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
-namespace General.Entities.Category
+namespace General.Entities
 {
     //[Table("Category")]   //这个才是数据的表
     //public class Category
@@ -33,7 +33,7 @@ namespace General.Entities.Category
     {
         public Category()
         {
-            SysPermissions = new HashSet<Entities.SysPermission.SysPermission>();
+            SysPermissions = new HashSet<Entities.SysPermission>();
         }
 
         public int Id { get; set; }
@@ -62,7 +62,7 @@ namespace General.Entities.Category
 
         public bool IsDisabled { get; set; }
 
-        public virtual ICollection<Entities.SysPermission.SysPermission> SysPermissions { get; set; }
+        public virtual ICollection<Entities.SysPermission> SysPermissions { get; set; }
 
     }
 

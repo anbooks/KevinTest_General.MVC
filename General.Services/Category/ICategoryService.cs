@@ -8,8 +8,12 @@ namespace General.Services.Category
 {
     public  interface ICategoryService
     {
-
-        List<Entities.Category.Category> getAll();
+        /// <summary>
+        /// 初始化保存方法
+        /// </summary>
+        /// <param name="list"></param>
+        void initCategory(List<Entities.Category> list);
+        List<Entities.Category> getAll();
        // List<Entities.Category> getAll();
     }
 

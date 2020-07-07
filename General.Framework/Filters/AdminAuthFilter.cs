@@ -1,4 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc.Filters;
+﻿using General.Core;
+using General.Framework.Security.Admin;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Filters;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -18,7 +21,11 @@ namespace General.Framework.Filters
 
         public void OnResourceExecuting(ResourceExecutingContext context)
         {
-           // throw new NotImplementedException();
+            var _adminAuthService = EnginContext.Current.Resolve<IAdminAuthService>();
+            var user = _adminAuthService.getCurrentUser();
+            if (user == null || !user.Enabled)
+                context.Result = new RedirectToRouteResult("adminLogin", new { returnUrl = context.HttpContext.Request.Path });
+            // throw new NotImplementedException();
         }
     }
 }

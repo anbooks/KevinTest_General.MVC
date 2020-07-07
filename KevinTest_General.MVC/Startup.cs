@@ -43,7 +43,7 @@ namespace KevinTest_General.MVC
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
-
+            services.AddMvc();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
             //services.AddDbContextPool<GeneralDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
@@ -118,6 +118,9 @@ namespace KevinTest_General.MVC
             services.AddSingleton<IMemoryCache, MemoryCache>();
             //services.BuildServiceProvider().GetService<ICategoryService>();
 
+            services.AddSingleton<IRegisterApplicationService, RegisterApplicationService>();
+
+
             //#Kevin 引入引擎机制
             EnginContext.Initialize(new GeneralEngine(services.BuildServiceProvider()));
 
@@ -130,6 +133,8 @@ namespace KevinTest_General.MVC
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+
+                app.UseBrowserLink();
             }
             else
             {
@@ -145,6 +150,9 @@ namespace KevinTest_General.MVC
 
             //Kevin 添加权限过滤
             app.UseAuthentication();
+
+            app.UseSession();
+
 
             app.UseMvc(routes =>
             {
@@ -162,6 +170,9 @@ namespace KevinTest_General.MVC
                   template: "{area:exists}/{controller=Login}/{action=Index}/{id?}"
                 );
             });
+
+            //初始化菜单
+            EnginContext.Current.Resolve<IRegisterApplicationService>().initRegister();
 
         }
     }

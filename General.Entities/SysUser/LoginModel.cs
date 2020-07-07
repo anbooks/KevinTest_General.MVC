@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
 
-namespace General.Entities.SysUser
+namespace General.Entities
 {
     public class LoginModel
     {

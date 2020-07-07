@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
-namespace General.Entities.SysUserToken
+namespace General.Entities
 {
     [Serializable]
     [Table("SysUserToken")]
@@ -16,7 +16,7 @@ namespace General.Entities.SysUserToken
         public DateTime ExpireTime { get; set; }
 
         [ForeignKey("SysUserId")]
-        public virtual Entities.SysUser.SysUser SysUser { get; set; }
+        public virtual Entities.SysUser SysUser { get; set; }
     }
 
 }

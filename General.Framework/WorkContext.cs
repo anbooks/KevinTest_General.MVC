@@ -1,4 +1,4 @@
-﻿using General.Entities.SysUser;
+﻿using General.Entities;
 using General.Framework.Infrastructure;
 using General.Framework.Security.Admin;
 using System;
@@ -26,5 +26,18 @@ namespace General.Framework
             get { return _authenticationService.getCurrentUser(); }
 
         }
+
+        /// <summary>
+        /// 当前登录用户菜单
+        /// </summary>
+        public List<Category> Categories
+        {
+            get
+            {
+                return _authenticationService.getMyCategories();
+            }
+        }
+
+
     }
 }
