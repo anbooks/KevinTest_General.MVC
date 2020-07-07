@@ -49,5 +49,13 @@ namespace General.Framework.Security.Admin
             _httpContextAccessor.HttpContext.SignInAsync(CookieAdminAuthInfo.AuthenticationScheme, claimsPrincipal);
         }
 
+        /// <summary>
+        /// 退出登录
+        /// </summary>
+        public void signOut()
+        {
+            _httpContextAccessor.HttpContext.SignOutAsync(CookieAdminAuthInfo.AuthenticationScheme);
+        }
+
     }
 }

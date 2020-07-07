@@ -105,6 +105,9 @@ namespace KevinTest_General.MVC
             //程序集依赖注入
             services.AddAssembly("General.Services");
 
+            services.AddSession();
+
+
 
             //泛型注入到Di里面
             services.AddScoped(typeof(IRepository<>), typeof(EfRepository<>) );

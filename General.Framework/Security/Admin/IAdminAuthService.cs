@@ -14,16 +14,20 @@ namespace General.Framework.Security.Admin
     /// <param name="token"></param>
     /// <param name="name"></param>
         void signIn(string token, string name);
-        
-        
-        
-        
-        
+
+
+
         /// <summary>
-    /// 获取当前登录用户
-    /// 缓存起来的
-    /// </summary>
-    /// <returns></returns>
+        /// 退出登录
+        /// </summary>
+        void signOut();
+
+
+        /// <summary>
+        /// 获取当前登录用户
+        /// 缓存起来的
+        /// </summary>
+        /// <returns></returns>
         Entities.SysUser.SysUser getCurrentUser();
     }
 }
